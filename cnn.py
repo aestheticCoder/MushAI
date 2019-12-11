@@ -81,17 +81,23 @@ class Mush1VsMush2():
                     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
                     # resize image (all inputs must be a standard IMG_SIZE)
                     img = cv2.resize(img, (self.IMG_SIZE, self.IMG_SIZE))
+                    
+                    # what is the right type of this img ? 
+                    print(label)
+                    print(self.LABELS[label])
+                    
+                    
                     # this will append the image and whether or not it is a cat or dog
-                    self.training_data.append([np.array(img), np.eye(2)[self.LABELS[label]]])
+                    self.training_data.append([np.array(img), np.eye(15)[self.LABELS[label]]])
 
                     # determine the balance of dataset (if imbalanced, the NN will learn to always guess that class first and may never overcome/optimize)
-#                    if label == self.AmanitaMuscaria:
-                    self.amanCount += 1
-#                    elif label == self.CortinariusViolaceus:
-#                        self.cortCount += 1
+                    if label == self.AmanitaMuscaria:
+                        self.amanCount += 1
+                    elif label == self.CortinariusViolaceus:
+                        self.cortCount += 1
                 except Exception as e:
                     # if image is no good or corrupt/empty
-                    # print(str(e))
+                    #print(str(e))
                     pass
 
         # shuffle the training data
@@ -110,13 +116,13 @@ if REBUILD_DATA:
 # some times you may have to add  " allow_pickle=True "  sometimes not
 training_data = np.load("training_data.npy", allow_pickle=True)
 # # print(len(training_data))
-print(training_data[14][0])
+#print(training_data[14][0])
 # # print(training_data[1])
 
 # # print the first item (0) in the second folder (1) which is a dog
 # # cmap attempts to color change
-plt.imshow(training_data[14][0])
-plt.show()
+# plt.imshow(training_data[1][0], cmap="gray")
+# plt.show()
 
 
 class Net(nn.Module):
@@ -150,7 +156,7 @@ class Net(nn.Module):
         
         #self._to_linear is to flatten
         self.fc1 = nn.Linear(self._to_linear, 512)
-        self.fc2 = nn.Linear(512, 2)
+        self.fc2 = nn.Linear(512, 15)
     def convs(self, x):
         # max pooling over 2x2
         x = F.max_pool2d(F.relu(self.conv1(x)), (2,2))
