@@ -15,27 +15,27 @@ REBUILD_DATA = True
 
 class Mush1VsMush2():
     IMG_SIZE = 50
-    # directory = /PetImages/Cat/ or /PetImages/Dog
-    AmanitaMuscaria = "data/train/AmanitaMuscaria"
-    AmanitaPantherina = "data/train/AmanitaPantherina"
-    AmanitaPhalloides = "data/train/AmanitaPhalloides"
-    AmanitaVirosa = "data/train/AmanitaVirosa"
-    Conocybe = "data/train/Conocybe"
-    CoprinopsisAtramentaria = "data/train/CoprinopsisAtramentaria"
-    CortinariusViolaceus = "data/train/CortinariusViolaceus"
-    GalerinaMarginata = "data/train/GalerinaMarginata"
-    GyromitraEsculenta = "data/train/GyromitraEsculenta"
-    HelvellaVespertina = "data/train/HelvellaVespertina"
-    LaetiporusConifericola = "data/train/LaetiporusConifericola"
-    PanaeolinaFoenisecii = "data/train/PanaeolinaFoenisecii"
-    PaxillusInvolutus = "data/train/PaxillusInvolutus"
-    PsilocybeCyanescens = "data/train/PsilocybeCyanescens"
-    TurbinellusFloccosus = "data/train/TurbinellusFloccosus"
+    # directory 
+    AmanitaMuscaria = "D:/Mushgroup/train/AmanitaMuscaria"
+    AmanitaPantherina = "D:/Mushgroup/train/AmanitaPantherina"
+    AmanitaPhalloides = "D:/Mushgroup/train/AmanitaPhalloides"
+    AmanitaVirosa = "D:/Mushgroup/train/AmanitaVirosa"
+    Conocybe = "D:/Mushgroup/train/Conocybe"
+    CoprinopsisAtramentaria = "D:/Mushgroup/train/CoprinopsisAtramentaria"
+    CortinariusViolaceus = "D:/Mushgroup/train/CortinariusViolaceus"
+    GalerinaMarginata = "D:/Mushgroup/train/GalerinaMarginata"
+    GyromitraEsculenta = "D:/Mushgroup/train/GyromitraEsculenta"
+    HelvellaVespertina = "D:/Mushgroup/train/HelvellaVespertina"
+    LaetiporusConifericola = "D:/Mushgroup/train/LaetiporusConifericola"
+    PanaeolinaFoenisecii = "D:/Mushgroup/train/PanaeolinaFoenisecii"
+    PaxillusInvolutus = "D:/Mushgroup/train/PaxillusInvolutus"
+    PsilocybeCyanescens = "D:/Mushgroup/train/PsilocybeCyanescens"
+    TurbinellusFloccosus = "D:/Mushgroup/train/TurbinellusFloccosus"
     
     LABELS = { AmanitaMuscaria: 0, 
                AmanitaPantherina: 1,
                AmanitaPhalloides: 2,
-               AmanitaPhalloides: 3,
+               AmanitaVirosa: 3,
                Conocybe: 4,
                CoprinopsisAtramentaria: 5,
                CortinariusViolaceus: 6,
@@ -50,24 +50,28 @@ class Mush1VsMush2():
                }
 
     training_data = []
+    
     # useful for determining "balance"
-    amanCount = 0
-    cortCount = 0
-
-    # example of np.eye(5)
-    # [[1, 0, 0, 0, 0]
-    #  [0, 1, 0, 0, 0]
-    #  [0, 0, 1, 0, 0]
-    #  [0, 0, 0, 0, 1]]
-    # example of np.eye(2)
-    # [[1, 0]
-    #  [0, 1]]
-    # np.eye(2)[0] = ([1, 0]) <--- CAT
-    # np.eye(2)[1] = ([0, 1]) <-- DOG
+    AmanitaMuscariaCount = 0
+    AmanitaPantherinaCount = 0
+    AmanitaPhalloidesCount = 0
+    AmanitaVirosaCount = 0
+    ConocybeCount = 0
+    CoprinopsisAtramentariaCount = 0
+    CortinariusViolaceusCount = 0
+    GalerinaMarginataCount = 0
+    GyromitraEsculentaCount = 0
+    HelvellaVespertinaCount = 0
+    LaetiporusConifericolaCount = 0
+    PanaeolinaFoeniseciiCount = 0
+    PaxillusInvolutusCount = 0
+    PsilocybeCyanescensCount = 0
+    TurbinellusFloccosusCount = 0
 
     def make_training_data(self):
         # iterate over the Keys AMANITAMUSCARIA/CortinariusViolaceus which are directories
         for label in self.LABELS:
+            print("Next is print(label)")
             print(label)
             # iterate over all the images in each directory
             # tqdm is a progress bar to tell how far along you are
@@ -81,30 +85,54 @@ class Mush1VsMush2():
                     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
                     # resize image (all inputs must be a standard IMG_SIZE)
                     img = cv2.resize(img, (self.IMG_SIZE, self.IMG_SIZE))
-                    
-                    # what is the right type of this img ? 
-                    print(label)
-                    print(self.LABELS[label])
-                    
-                    
-                    # this will append the image and whether or not it is a cat or dog
+                    # this will append the image and which mushroom (index)
                     self.training_data.append([np.array(img), np.eye(15)[self.LABELS[label]]])
 
                     # determine the balance of dataset (if imbalanced, the NN will learn to always guess that class first and may never overcome/optimize)
                     if label == self.AmanitaMuscaria:
-                        self.amanCount += 1
-                    elif label == self.CortinariusViolaceus:
-                        self.cortCount += 1
+                        self.AmanitaMuscariaCount += 1
+                    if label == self.AmanitaPantherina:
+                        self.AmanitaPantherinaCount += 1
+                    if label == self.AmanitaPhalloides:
+                        self.AmanitaPhalloidesCount += 1
+                    if label == self.AmanitaVirosa:
+                        self.AmanitaVirosaCount += 1
+                    if label == self.Conocybe:
+                        self.ConocybeCount += 1
+                    if label == self.CoprinopsisAtramentaria:
+                        self.CoprinopsisAtramentariaCount += 1
+                    if label == self.CortinariusViolaceus:
+                        self.CortinariusViolaceusCount += 1
+                    if label == self.GalerinaMarginata:
+                        self.GalerinaMarginataCount += 1
+                    if label == self.GyromitraEsculenta:
+                        self.GyromitraEsculentaCount += 1
+                    if label == self.HelvellaVespertina:
+                        self.HelvellaVespertinaCount += 1
+                    if label == self.LaetiporusConifericola:
+                        self.LaetiporusConifericolaCount += 1
+                    if label == self.PanaeolinaFoenisecii:
+                        self.PanaeolinaFoeniseciiCount += 1
+                    if label == PaxillusInvolutus:
+                        self.PaxillusInvolutusCount += 1
+                    if label == PsilocybeCyanescens:
+                        self.PsilocybeCyanescensCount += 1
+                    if label == TurbinellusFloccosus:
+                        self.TurbinellusFloccosusCount += 1
+                    
                 except Exception as e:
                     # if image is no good or corrupt/empty
-                    #print(str(e))
+                    # print(str(e))
                     pass
 
         # shuffle the training data
         np.random.shuffle(self.training_data)
-        np.save("training_data.npy", self.training_data)
-        print("AmanitaMuscaria: ", self.amanCount)
-        print("CortinariusViolaceus: ", self.cortCount)
+        np.save("new_training_data.npy", self.training_data)
+#        print("Just loadded training_data. Next is print amanCount and cortCount")
+#        print("AmanitaMuscaria: ", self.AmanitaMuscariaCount)
+#        print("AmanitaPantherina: ", self.AmanitaPantherinaCount)
+#        print("AmanitaPhalloides: ", self.AmanitaPhalloidesCount)
+#        print("CortinariusViolaceus: ", self.CortinariusViolaceusCount)
 
 
 
@@ -114,13 +142,12 @@ if REBUILD_DATA:
     amanVsCort.make_training_data()
 
 # some times you may have to add  " allow_pickle=True "  sometimes not
-training_data = np.load("training_data.npy", allow_pickle=True)
-# # print(len(training_data))
-#print(training_data[14][0])
-# # print(training_data[1])
+training_data = np.load("new_training_data.npy", allow_pickle=True)
 
 # # print the first item (0) in the second folder (1) which is a dog
 # # cmap attempts to color change
+#plt.imshow(training_data[1][0], cmap="gray")
+
 # plt.imshow(training_data[1][0], cmap="gray")
 # plt.show()
 
@@ -140,20 +167,7 @@ class Net(nn.Module):
         # -1 specifies take input of any size
         x = torch.randn(50,50).view(-1,1,50,50)
         self._to_linear = None
-        self.convs(x)
-
-        # fully connected layer input should be calculated as such below
-        # cant figure out why it does not add up so we use self._to_linear in lieu
-        # formula for output is O = {(W - k + 2*P)/s} + 1 
-        # where w = initial image size, k = kernel size, s = stride size, p = padding size
-        # input should be (50 - 5 + 2*0)/1  + 1 = 46
-        # max pooling where p = pool size/area of Output/p = 46/2 = 23
-        # {(23 - 5 + 2*0)/1} + 1 = 19
-        # max pooling with floor function o/p = 19/2 = 9
-        # {(9-5 + 2*0)/1} + 1 = 5
-        # 5/2 = 2
-        # i think formula is 2*2*50 or 2*2*128 where 128 is original pixel dimension of image
-        
+        self.convs(x)        
         #self._to_linear is to flatten
         self.fc1 = nn.Linear(self._to_linear, 512)
         self.fc2 = nn.Linear(512, 15)
@@ -163,7 +177,6 @@ class Net(nn.Module):
         x = F.max_pool2d(F.relu(self.conv2(x)), (2,2))
         x = F.max_pool2d(F.relu(self.conv3(x)), (2,2))
 
-        # print(x[0].shape)
         if self._to_linear is None:
             # x is a "batch of data"
             self._to_linear = x[0].shape[0]*x[0].shape[1]*x[0].shape[2]
@@ -182,7 +195,7 @@ class Net(nn.Module):
 
 net = Net()
 
-optimizer = optim.Adam(net.parameters(), lr=0.001)
+optimizer = optim.Adam(net.parameters(), lr=0.1)
 # Mean Squared Error
 loss_function = nn.MSELoss()
 
@@ -204,11 +217,8 @@ train_y = y[:-val_size]
 test_x = x[-val_size:]
 test_y = y[-val_size:]
 
-# print(len(train_x))
-# print(len(test_x))
-
-BATCH_SIZE = 200
-EPOCHS = 2
+BATCH_SIZE = 100
+EPOCHS = 1
 
 for epoch in range(EPOCHS):
     # from 0 to length of size of X, take steps the size of BATCH_SIZE
@@ -223,6 +233,7 @@ for epoch in range(EPOCHS):
         # do backwards propogation on loss
         loss.backward()
         optimizer.step()
+print("Next is print(loss)")
 print(loss)
 
 correct = 0
@@ -236,5 +247,5 @@ with torch.no_grad():
         if predicted_class == real_class:
             correct += 1
         total += 1
-
+print("Next is print Accuracy")
 print("Accuracy: ", round(correct/total,3))
